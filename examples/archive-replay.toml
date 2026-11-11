@@ -1,0 +1,48 @@
+# A stricter profile for a project that has already been asked to slow down.
+#
+# The defaults in archivebase.toml are already conservative. This one is for the
+# case where a server has complained once: the correct move is then to want
+# less, not to schedule the same amount more carefully.
+#
+#   cp examples/archive-replay.toml archivebase.toml
+#   arcb doctor
+#   arcb audit .
+#   arcb discover --prefix "example.com/games/" --mime application/x-shockwave-flash
+
+[project]
+name = "ArchiveReplayProject"
+version = "0.2"
+contact = "https://github.com/you/your-project"
+
+[policy]
+concurrency = 1
+min_gap_seconds = 15.0          # slower than the global default
+max_requests_per_day = 100      # about seven hours of sustained crawling, and no more
+max_requests_per_run = 40
+max_runtime_seconds = 1800
+attempts_per_url = 2
+backoff_seconds = [120, 600, 1800, 7200]
+
+respect_retry_after = true
+stop_on_403 = true
+stop_on_429 = true
+stop_on_503 = true
+stop_on_5xx = false
+stop_on_drop = true
+
+max_redirects = 3
+max_bytes = 100000000
+timeout_seconds = 180
+
+[robots]
+mode = "warn"
+
+[[host]]
+pattern = "web.archive.org"
+min_gap_seconds = 30
+max_requests_per_day = 80
+
+[[host]]
+pattern = "archive.org"
+min_gap_seconds = 20
+max_requests_per_day = 20

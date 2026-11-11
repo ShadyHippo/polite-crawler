@@ -1,0 +1,21 @@
+# archivebase keeps its state outside the repo (see [storage] state_dir), so the
+# only things ignored here are build and interpreter junk.
+
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+
+# Local scratch: databases and exported trees live under ~/.local/state.
+*.db
+*.db-wal
+*.db-shm
+*.jsonl
+
+.DS_Store

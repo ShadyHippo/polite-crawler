@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "polite-crawler"
+version = "0.1.0"
+description = "A request gate for polite archival crawling: one global slot, one budget, one stop button."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "ShadyHippo" }]
+keywords = [
+    "crawler",
+    "web-archive",
+    "wayback",
+    "rate-limit",
+    "etiquette",
+    "digital-preservation",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: System :: Archiving",
+    "Typing :: Typed",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/ShadyHippo/polite-crawler"
+Repository = "https://github.com/ShadyHippo/polite-crawler"
+Issues = "https://github.com/ShadyHippo/polite-crawler/issues"
+
+[project.scripts]
+arcb = "archivebase.cli:main"
+
+[tool.setuptools]
+packages = ["archivebase"]

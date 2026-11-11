@@ -1,0 +1,62 @@
+# archivebase — annotated policy for a project that reads from archive replay.
+#
+# Copy this next to your crawler as `archivebase.toml`, then edit [project].
+# Every ceiling below can be lowered without changing any code.
+
+[project]
+name = "ExampleArchive"
+version = "0.1"
+# Goes into the User-Agent. Use a page that actually describes the project and
+# how to contact you — an administrator's only alternative is a block.
+contact = "https://github.com/you/example-archive"
+# user_agent = ""        # defaults to "<name>/<version> (+<contact>)"
+
+[policy]
+concurrency = 1                 # the gate enforces this machine-wide
+min_gap_seconds = 10.0          # one request every ten seconds
+max_requests_per_day = 500      # hard ceiling, shared by every process
+max_requests_per_run = 60       # one invocation cannot run away
+max_runtime_seconds = 1800      # 30 minutes
+attempts_per_url = 2            # 1 try + 1 retry, and never immediately
+backoff_seconds = [60, 300, 900, 3600]
+
+# Server answers are instructions.
+respect_retry_after = true
+stop_on_403 = true              # 403: stop, require a human
+stop_on_429 = true              # 429: stop the whole job
+stop_on_503 = true              # 503: stop, back off substantially
+stop_on_5xx = false             # other 5xx: limited retries
+stop_on_drop = true             # reset/timeout: throttling, not "absent"
+
+max_redirects = 3
+max_bytes = 80000000            # refuse a body larger than 80 MB
+timeout_seconds = 120
+
+[robots]
+# off | warn | enforce
+# "warn" records what robots.txt says and proceeds (archive replay hosts often
+# serve no robots.txt at all). "enforce" is right for a live origin site.
+mode = "warn"
+
+[storage]
+# Per-project: catalogue, queue, capture blobs.
+# data_dir = "~/.local/state/archivebase/projects/examplearchive"
+# Machine-wide, shared with every other project on this machine on purpose:
+# one request slot, one 500/day budget, one PAUSED file.
+# gate_dir = "~/.local/state/archivebase"
+# cache_dir = ""
+
+# Per-host overrides. The global gate still applies; these only tighten it.
+[[host]]
+pattern = "web.archive.org"
+min_gap_seconds = 30            # slower than the global default
+max_requests_per_day = 200      # and a smaller share of the budget
+
+[[host]]
+pattern = "archive.org"
+min_gap_seconds = 15
+
+# A host you decided not to touch at all.
+# [[host]]
+# pattern = "example-cdn.com"
+# enabled = false
